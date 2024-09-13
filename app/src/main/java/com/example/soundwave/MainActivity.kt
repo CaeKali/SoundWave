@@ -20,28 +20,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             SoundWaveTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Hello ",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    SoundWaveApp()
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun SoundWaveApp(){
+
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SoundWaveTheme {
-        Greeting("Android")
-    }
-}
