@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             SoundWaveTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Hello",
+                        name = "Hello ",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
