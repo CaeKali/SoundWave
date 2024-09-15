@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -65,19 +64,8 @@ fun HomeScreen(modifier:Modifier = Modifier){
                 IconButton(onClick = {
 
                 }) {
-                    Icon(painter = painterResource(R.drawable.ic_prev),"previous", tint = Color.Black)
-                }
-                IconButton(onClick = {
 
-                }) {
-                    Icon(painter = painterResource(R.drawable.ic_play),"play or pause",)
                 }
-                IconButton(onClick = {
-
-                }) {
-                    Icon(painter = painterResource(R.drawable.ic_next),"next")
-                }
-
             }
 
         }
