@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.soundwave.ui.theme.SoundWaveTheme
+import com.example.soundwave.ui.theme.screens.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SoundWaveApp(){
-
+    HomeScreen()
 }
 
