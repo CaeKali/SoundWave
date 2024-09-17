@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,7 +51,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     var currentSong by remember {
         mutableStateOf(
             Song(
-                R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
+                R.string.unknown,
+                R.string.unknown,
+                R.drawable.default_album,
+                R.string.unknown,
+                songDuration = 0L
             )
         )
     }
@@ -99,8 +104,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Bottom
         ) {
-            SongList(
-                songs,
+            SongList(songs,
                 modifier = Modifier.weight(1f),
                 onClick = { song -> currentSong = song })
             Row(
@@ -117,23 +121,23 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_genre),
+                        painter = painterResource(currentSong.albumArt),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(
-                                56.dp
+                        modifier = Modifier.size(
+                                66.dp, 56.dp
                             )
-                            .clip(CircleShape)
+
                     )
+                    Spacer(modifier = Modifier.width(6.dp))
                     Column(modifier = Modifier.fillMaxWidth()) {
                         SongItemText(
-                            text = stringResource(R.string.unknown),
+                            text = stringResource(currentSong.songTitle),
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         SongItemText(
-                            text = stringResource(R.string.unknown),
+                            text = stringResource(currentSong.songArtists),
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
