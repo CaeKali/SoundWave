@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,17 +30,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.soundwave.R
 import com.example.soundwave.models.Song
+import com.example.soundwave.utils.msToText
 
 @Composable
-fun SongItem(song: Song,onClick:(Song) -> Unit) {
-//    Card(modifier = Modifier.fillMaxWidth()) {
+fun SongItem(song: Song, onClick: (Song) -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth().padding(5.dp).clickable { onClick(song) },
+            .fillMaxWidth()
+            .padding(5.dp)
+            .clickable { onClick(song) },
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Bottom
     ) {
         Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -47,43 +52,55 @@ fun SongItem(song: Song,onClick:(Song) -> Unit) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(
-                        66.dp,56.dp
+                        56.dp
                     )
+                    .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Column(
                 modifier = Modifier.weight(1f), verticalArrangement = Arrangement.SpaceBetween
             ) {
                 SongItemText(
-                    text = stringResource(song.songTitle), modifier = Modifier.fillMaxWidth()
+                    text = stringResource(song.songTitle),
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    SongItemText(text = stringResource(song.songAlbum))
-                    SongItemText(text = stringResource(song.songArtists))
+                    SongItemText(
+                        text = stringResource(song.songAlbum),
+                        textStyle = TextStyle(fontSize = 16.sp)
+                    )
+                    SongItemText(
+                        text = msToText(song.songDuration),
+                        textStyle = TextStyle(fontSize = 16.sp)
+                    )
                 }
             }
         }
         IconButton(onClick = {
-
+            // Not Implemented
         }) {
             Icon(painter = painterResource(R.drawable.ic_more_vert), contentDescription = null)
         }
     }
-//    }
 }
 
 
 @Composable
-fun SongItemText(text: String, modifier: Modifier = Modifier,textStyle: TextStyle = TextStyle.Default) {
-    Text(text, fontWeight = FontWeight.Bold, style = textStyle, overflow = TextOverflow.Ellipsis, modifier = modifier)
+fun SongItemText(
+    text: String,
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = TextStyle.Default
+) {
+    Text(text, style = textStyle, overflow = TextOverflow.Ellipsis, modifier = modifier)
 }
 
 @Composable
-fun SongList(songs: List<Song>, onClick: (Song) -> Unit ,modifier: Modifier = Modifier) {
+fun SongList(songs: List<Song>, onClick: (Song) -> Unit, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
         items(songs) { song ->
             SongItem(song, onClick = onClick)
@@ -96,30 +113,8 @@ fun SongList(songs: List<Song>, onClick: (Song) -> Unit ,modifier: Modifier = Mo
 fun SongItemPreview() {
     val songs = listOf(
         Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
+            R.string.unknown_title, R.string.unknown_album, R.drawable.default_album, R.string.unknown_artists, songDuration = 0L
+        )
     )
-
     SongList(songs, onClick = {}, modifier = Modifier.fillMaxSize())
 }

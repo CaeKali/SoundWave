@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Sound Wave</string>
-    <string name="unknown">Unknown</string>
+    <string name="unknown_artists">Unknown Artists</string>
+    <string name="unknown_album">Unknown Album</string>
+    <string name="unknown_title">Unknown Title</string>
 </resources>

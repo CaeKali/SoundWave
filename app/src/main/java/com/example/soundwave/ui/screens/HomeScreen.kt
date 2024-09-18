@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,11 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.soundwave.R
 import com.example.soundwave.models.Song
 import com.example.soundwave.ui.components.MediaControls
@@ -43,61 +48,28 @@ import com.example.soundwave.ui.components.SongList
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-
     var isPlaying by remember {
         mutableStateOf(false)
     }
 
+    // song with default values
     var currentSong by remember {
         mutableStateOf(
             Song(
-                R.string.unknown,
-                R.string.unknown,
+                R.string.unknown_title,
+                R.string.unknown_album,
                 R.drawable.default_album,
-                R.string.unknown,
+                R.string.unknown_artists,
                 songDuration = 0L
             )
         )
     }
-    val songs = listOf(
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-        Song(
-            R.string.unknown, R.string.unknown, R.drawable.ic_genre, R.string.unknown, 5000L
-        ),
-    )
-    Scaffold(modifier = Modifier.fillMaxSize(), topBar = { HomeScreenTopBar() }) { innerPadding ->
+
+    val songs = listOf(currentSong)
+
+    Scaffold(modifier = Modifier.fillMaxSize(), topBar = { HomeScreenTopBar() }, bottomBar = {
+        HomeScreenBottomNav()
+    }) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,12 +79,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             SongList(songs,
                 modifier = Modifier.weight(1f),
                 onClick = { song -> currentSong = song })
+
+            // mini player
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .background(color = Color.Gray)
-                    .padding(5.dp), horizontalArrangement = Arrangement.SpaceBetween
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = Color.LightGray)
+                    .padding(5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(
                     modifier = Modifier
@@ -124,21 +100,24 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         painter = painterResource(currentSong.albumArt),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(
-                                66.dp, 56.dp
+                        modifier = Modifier
+                            .size(
+                                56.dp
                             )
-
+                            .clip(CircleShape)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Column(modifier = Modifier.fillMaxWidth()) {
                         SongItemText(
-                            text = stringResource(currentSong.songTitle),
-                            modifier = Modifier.fillMaxWidth()
+                            text = LocalContext.current.getString(currentSong.songTitle),
+                            modifier = Modifier.fillMaxWidth(),
+                            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         SongItemText(
-                            text = stringResource(currentSong.songArtists),
-                            modifier = Modifier.fillMaxWidth()
+                            text = LocalContext.current.getString(currentSong.songArtists),
+                            modifier = Modifier.fillMaxWidth(),
+                            textStyle = TextStyle(fontSize = 16.sp)
                         )
                     }
                 }
@@ -161,14 +140,50 @@ fun HomeScreenTopBar() {
         IconButton(onClick = {
             // NOT implemented
         }) {
-            Icon(painter = painterResource(R.drawable.ic_search), contentDescription = null)
-        }
-        IconButton(onClick = {
-            // NOT implemented
-        }) {
             Icon(painter = painterResource(R.drawable.ic_menu), contentDescription = null)
         }
     })
+}
+
+
+@Composable
+fun HomeScreenBottomNav() {
+    NavigationBar {
+        NavigationBarItem(selected = true, onClick = {
+            // NOT implemented
+        }, icon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_home), contentDescription = null
+            )
+        }, label = {
+            Text(text = "Home")
+        })
+        NavigationBarItem(selected = false, onClick = {
+            // NOT implemented
+        }, icon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_favorite), contentDescription = null
+            )
+        }, label = {
+            Text(text = "Favorites")
+        })
+        NavigationBarItem(selected = false, onClick = {
+            // NOT implemented
+        }, icon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_playlist), contentDescription = null
+            )
+        }, label = {
+            Text(text = "Playlist")
+        })
+        NavigationBarItem(selected = false, onClick = {
+            // NOT implemented
+        }, icon = {
+            Icon(painter = painterResource(R.drawable.ic_search), contentDescription = null)
+        }, label = {
+            Text(text = "Search")
+        })
+    }
 }
 
 @Preview(showBackground = true)
