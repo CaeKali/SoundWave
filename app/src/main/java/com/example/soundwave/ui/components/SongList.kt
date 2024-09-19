@@ -112,8 +112,5 @@ fun SongList(songs: List<Song>,currentIndex:Int, onSelectSong: (Song,Int) -> Uni
                 backgroundColor = backgroundColor
             )
         }
-//        items(songs) { song ->
-//            SongItem(song, onClick = onClick)
-//        }
     }
 }
