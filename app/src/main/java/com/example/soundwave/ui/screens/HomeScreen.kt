@@ -52,6 +52,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         mutableStateOf(false)
     }
 
+    var currentSongIndex by remember {
+        mutableStateOf(0)
+    }
+
     // song with default values
     var currentSong by remember {
         mutableStateOf(
@@ -65,7 +69,48 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
     }
 
-    val songs = listOf(currentSong)
+    val songs = listOf(
+        Song(
+            R.string.title_1,
+            R.string.album_1,
+            R.drawable.default_album,
+            R.string.artists_1,
+            songDuration = 303434L
+        ),
+        Song(
+            R.string.title_2,
+            R.string.album_2,
+            R.drawable.default_album,
+            R.string.artists_2,
+            songDuration = 303434L
+        ),
+
+        Song(
+            R.string.title_3,
+            R.string.album_3,
+            R.drawable.default_album,
+            R.string.artists_3,
+            songDuration = 303434L
+        ),
+
+        Song(
+            R.string.title_4,
+            R.string.album_4,
+            R.drawable.default_album,
+            R.string.artists_4,
+            songDuration = 303434L
+        ),
+
+        Song(
+            R.string.title_5,
+            R.string.album_5,
+            R.drawable.default_album,
+            R.string.artists_5,
+            songDuration = 303434L
+        ),
+    )
+
+    currentSong = songs[currentSongIndex]
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = { HomeScreenTopBar() }, bottomBar = {
         HomeScreenBottomNav()
@@ -78,7 +123,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         ) {
             SongList(songs,
                 modifier = Modifier.weight(1f),
-                onClick = { song -> currentSong = song })
+                currentIndex = currentSongIndex,
+                onSelectSong = { song, index ->
+                    currentSong = song
+                    currentSongIndex = index
+                })
+
 
             // mini player
             Row(
@@ -86,7 +136,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .height(64.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(color = Color.LightGray)
+                    .background(color = Color.DarkGray)
                     .padding(5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -111,19 +161,29 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         SongItemText(
                             text = LocalContext.current.getString(currentSong.songTitle),
                             modifier = Modifier.fillMaxWidth(),
-                            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                            textStyle = TextStyle(
+                                fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White
+                            )
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         SongItemText(
                             text = LocalContext.current.getString(currentSong.songArtists),
                             modifier = Modifier.fillMaxWidth(),
-                            textStyle = TextStyle(fontSize = 16.sp)
+                            textStyle = TextStyle(fontSize = 16.sp, color = Color.White)
                         )
                     }
                 }
                 MediaControls(isPlaying = isPlaying,
                     modifier = Modifier.fillMaxHeight(),
-                    onPlay = { isPlaying = if (isPlaying) false else true })
+                    onPlay = { isPlaying = if (isPlaying) false else true },
+                    onNextClick = {
+                        if (currentSongIndex != songs.lastIndex) currentSongIndex++ else currentSongIndex =
+                            0
+                    },
+                    onPrevClick = {
+                        if (currentSongIndex != 0) currentSongIndex-- else currentSongIndex =
+                            songs.lastIndex
+                    })
             }
         }
 

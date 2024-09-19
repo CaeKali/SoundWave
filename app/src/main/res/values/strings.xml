@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">Sound Wave</string>
+
+    <string name="artists_1">Artists 1</string>
+    <string name="album_1">Album 1</string>
+    <string name="title_1">Title 1</string>
+
+
+    <string name="artists_2"> Artists 2</string>
+    <string name="album_2"> Album 2</string>
+    <string name="title_2"> Title 2</string>
+
+    <string name="artists_3"> Artists 3</string>
+    <string name="album_3"> Album 3</string>
+    <string name="title_3"> Title 3</string>
+
+    <string name="artists_4"> Artists 4</string>
+    <string name="album_4"> Album 4</string>
+    <string name="title_4"> Title 4</string>
+
+    <string name="artists_5"> Artists 5</string>
+    <string name="album_5"> Album 5</string>
+    <string name="title_5"> Title 5</string>
+
     <string name="unknown_artists">Unknown Artists</string>
     <string name="unknown_album">Unknown Album</string>
     <string name="unknown_title">Unknown Title</string>

@@ -1,19 +1,19 @@
 package com.example.soundwave.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,26 +22,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundwave.R
 import com.example.soundwave.models.Song
 import com.example.soundwave.utils.msToText
 
+
 @Composable
-fun SongItem(song: Song, onClick: (Song) -> Unit) {
+fun SongItem(song: Song,onClick: () -> Unit, backgroundColor: Color) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth().background(backgroundColor)
             .padding(5.dp)
-            .clickable { onClick(song) },
+            .clickable { onClick()},
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
@@ -89,32 +90,30 @@ fun SongItem(song: Song, onClick: (Song) -> Unit) {
     }
 }
 
-
 @Composable
 fun SongItemText(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyle.Default
 ) {
-    Text(text, style = textStyle, overflow = TextOverflow.Ellipsis, modifier = modifier)
+    Text(text, style = textStyle, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = modifier)
 }
 
 @Composable
-fun SongList(songs: List<Song>, onClick: (Song) -> Unit, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
-        items(songs) { song ->
-            SongItem(song, onClick = onClick)
+fun SongList(songs: List<Song>,currentIndex:Int, onSelectSong: (Song,Int) -> Unit, modifier: Modifier = Modifier) {
+  LazyColumn(modifier = modifier) {
+        itemsIndexed(songs){index,song ->
+            // Highlight the selected song by comparing index
+            val backgroundColor =
+                if (currentIndex == index) Color(0xFF807767) else Color.Transparent
+            SongItem(
+                song = song,
+                onClick = { onSelectSong(song,index)},
+                backgroundColor = backgroundColor
+            )
         }
+//        items(songs) { song ->
+//            SongItem(song, onClick = onClick)
+//        }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SongItemPreview() {
-    val songs = listOf(
-        Song(
-            R.string.unknown_title, R.string.unknown_album, R.drawable.default_album, R.string.unknown_artists, songDuration = 0L
-        )
-    )
-    SongList(songs, onClick = {}, modifier = Modifier.fillMaxSize())
 }
